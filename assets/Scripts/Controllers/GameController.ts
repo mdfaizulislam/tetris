@@ -29,7 +29,7 @@ export default class GameController {
         this.mUpcomingTetrimino = null;
         this.mGameState = GameState.Ready;
         this.mGridBlocksMap = [];
-        this.mLogger = Logger.create('GameController', true);
+        this.mLogger = Logger.create('GameController', false);
     }
 
     public setPersistentComponent(persistentComponent: PersistentComponent) {

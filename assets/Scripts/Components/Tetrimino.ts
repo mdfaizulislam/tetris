@@ -58,7 +58,7 @@ export default class Tetrimino extends cc.Component {
 
     protected onLoad() {
         this.mPersistentComponent = cc.find('PersistantNode').getComponent(PersistentComponent);
-        this.mLogger = Logger.create('Tetrimino', true);
+        this.mLogger = Logger.create('Tetrimino', false);
         this.mMovigDownInterval = Config.BLOCK_MOVING_INTERVAL;
         this.mChangeActionInterval = Config.BLOCK_ACTOION_CHANGE_INTERVAL;
         this.mMooveDirection = MoveDirection.None;

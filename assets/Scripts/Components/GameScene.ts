@@ -59,7 +59,7 @@ export default class GameScene extends cc.Component {
     // LIFE-CYCLE CALLBACKS:
     onLoad() {
         this.mPersistentComponent = cc.find('PersistantNode').getComponent(PersistentComponent);
-        this.mLogger = Logger.create('GameScene', true);
+        this.mLogger = Logger.create('GameScene', false);
         this.mPersistentComponent.setGameScene(this);
         this.mPlayer = this.mPersistentComponent.getPlayer();
         this.mGameOver = false;
