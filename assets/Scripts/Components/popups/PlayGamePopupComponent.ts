@@ -32,7 +32,6 @@ export default class PlayGamePopupComponent extends cc.Component {
     }
 
     OnPlayPressed() {
-        console.log('OnPlayAgainPressed');
         this.setPlayButtonInteractibility(false);
         this.mPersistentComponent.node.emit(Constants.EVENTS.PLAY_TETRIS);
         this.getComponent(PopupComponent).hidePopup();
