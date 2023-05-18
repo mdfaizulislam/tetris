@@ -54,6 +54,7 @@ export default class GameScene extends cc.Component {
     private mEmptyGrid: cc.Node = null;
     private mBlocksHolder: cc.Node = null;
     private mTetriMovingLayer: cc.Node = null;
+    private mVisibilityChangeCallback: (event: {}) => void;
 
     // LIFE-CYCLE CALLBACKS:
     onLoad() {
@@ -66,12 +67,16 @@ export default class GameScene extends cc.Component {
         this.addKeyEventHandlers();
         this.addButtonTouchEventHandlers();
         this.addPersistentNodeEventHandlers();
+
+        this.mVisibilityChangeCallback = this.onVisibilityChange.bind(this);
+        document.addEventListener('visibilitychange', this.mVisibilityChangeCallback);
     }
 
     onDestroy() {
         this.removeKeyEventHandlers();
         this.removeButtonTouchEventHandlers();
         this.removePersistentNodeEventHandlers();
+        document.removeEventListener('visibilitychange', this.mVisibilityChangeCallback);
     }
 
     protected onEnable(): void {
@@ -198,6 +203,17 @@ export default class GameScene extends cc.Component {
             .initialize();
     }
 
+    private onVisibilityChange() {
+        let visibleStatus = !document.hidden;
+        this.mLogger.Warn('game visibility: ' + (visibleStatus ? 'visible' : 'not visible'));
+        let gameController = this.mPersistentComponent.getGameController();
+        let oldState = gameController.getGameState();
+        if (!this.mGameOver && (oldState == GameState.Running || oldState == GameState.Paused)) {
+            let newState = visibleStatus ? GameState.Running : GameState.Paused;
+            gameController.setGameState(newState);
+        }
+    }
+
     private addKeyEventHandlers() {
         cc.systemEvent.on(cc.SystemEvent.EventType.KEY_DOWN, this.onKeyDown, this);
         cc.systemEvent.on(cc.SystemEvent.EventType.KEY_UP, this.onKeyUp, this);
@@ -245,8 +261,6 @@ export default class GameScene extends cc.Component {
             return;
         }
 
-        this.mLogger.Log('keyDown: ', event.keyCode);
-
         switch (event.keyCode) {
             case cc.macro.KEY.w:
             case cc.macro.KEY.up:
@@ -278,8 +292,6 @@ export default class GameScene extends cc.Component {
         if (this.mPersistentComponent.getGameController().getGameState() !== GameState.Running) {
             return;
         }
-
-        this.mLogger.Log('keyDown: ', event.keyCode);
 
         switch (event.keyCode) {
             default:
